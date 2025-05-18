@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #f8fafc;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 2.2em;
+  line-height: 1.1;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.8em;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.4em;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+/* Form elements styling */
+.form-input {
+  @apply block w-full px-4 py-2 mt-1 text-gray-900 bg-white border border-gray-300 rounded-md shadow-sm;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
+}
+
+.form-select {
+  @apply block w-full px-4 py-2 mt-1 text-gray-900 bg-white border border-gray-300 rounded-md shadow-sm;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
+}
+
+.form-checkbox {
+  @apply w-4 h-4 text-primary-600 border-gray-300 rounded;
+  @apply focus:ring-primary-500;
+}
+
+.form-radio {
+  @apply w-4 h-4 text-primary-600 border-gray-300;
+  @apply focus:ring-primary-500;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center px-4 py-2 font-medium text-white bg-primary-700 border border-transparent rounded-md shadow-sm;
+  @apply hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500;
+  @apply transition-colors duration-200;
+}
+
+.btn-secondary {
+  @apply text-gray-700 bg-white border-gray-300;
+  @apply hover:bg-gray-50;
+}
+
+.btn-accent {
+  @apply bg-accent-600;
+  @apply hover:bg-accent-700 focus:ring-accent-500;
+}
+
+.btn-success {
+  @apply bg-success-500;
+  @apply hover:bg-success-700 focus:ring-success-500;
+}
+
+.btn-warning {
+  @apply bg-warning-500;
+  @apply hover:bg-warning-700 focus:ring-warning-500;
+}
+
+.btn-error {
+  @apply bg-error-500;
+  @apply hover:bg-error-700 focus:ring-error-500;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md overflow-hidden;
+}
+
+.transition-base {
+  @apply transition duration-300 ease-in-out;
+}
+
+#app {
+  width: 100%;
+}
+
+/* Calendar styling */
+.fc .fc-toolbar-title {
+  @apply text-xl font-bold text-gray-800;
+}
+
+.fc .fc-button-primary {
+  @apply bg-primary-700 border-primary-700;
+  @apply hover:bg-primary-800 hover:border-primary-800;
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active, 
+.fc .fc-button-primary:not(:disabled):active {
+  @apply bg-primary-800 border-primary-800;
+}
+
+.fc-event {
+  @apply cursor-pointer;
+}
+
+.fc-event-main {
+  @apply p-1;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #1a1a1a;
+  }
+  .card {
+    @apply bg-gray-800;
+  }
+  .form-input, .form-select {
+    @apply bg-gray-700 border-gray-600 text-white;
+  }
+  .fc .fc-toolbar-title {
+    @apply text-white;
+  }
+}
