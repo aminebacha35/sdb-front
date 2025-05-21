@@ -24,7 +24,7 @@ function toggleMobileMenu() {
         <div class="flex">
           <div class="flex-shrink-0 flex items-center">
             <router-link to="/" class="text-white font-bold text-xl">
-              GarageRDV
+              <img src="/sdb.auto.centre.png" class="h-20 ml-3 my-2" />
             </router-link>
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
