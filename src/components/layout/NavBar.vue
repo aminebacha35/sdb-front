@@ -36,7 +36,14 @@ function toggleMobileMenu() {
               Accueil
             </router-link>
             <router-link 
-              to="/appointment" 
+              to="/nos-services" 
+              class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
+              active-class="text-white font-bold"
+            >
+            Nos services 
+            </router-link>
+            <router-link
+              to="/appointment"
               class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
               active-class="text-white font-bold"
             >
