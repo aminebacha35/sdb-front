@@ -24,7 +24,7 @@ function toggleMobileMenu() {
         <div class="flex">
           <div class="flex-shrink-0 flex items-center">
             <router-link to="/" class="text-white font-bold text-xl">
-              GarageRDV
+              <img src="/sdb.auto.centre.png" class="h-20 ml-3 my-2" />
             </router-link>
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -36,7 +36,14 @@ function toggleMobileMenu() {
               Accueil
             </router-link>
             <router-link 
-              to="/appointment" 
+              to="/nos-services" 
+              class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
+              active-class="text-white font-bold"
+            >
+            Nos services 
+            </router-link>
+            <router-link
+              to="/appointment"
               class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
               active-class="text-white font-bold"
             >

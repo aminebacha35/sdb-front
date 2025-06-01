@@ -9,6 +9,7 @@ import AppointmentsList from '../views/admin/AppointmentsList.vue'
 import CalendarView from '../views/admin/CalendarView.vue'
 import ServiceTypes from '../views/admin/ServiceTypes.vue'
 import NotFound from '../views/NotFound.vue'
+import ServiceView from '../views/client/ServiceView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +34,11 @@ const router = createRouter({
       path: '/admin/login',
       name: 'admin-login',
       component: AdminLogin
+    },
+    {
+      path: '/nos-services',
+      name: 'nos-services',
+      component: ServiceView
     },
     {
       path: '/admin',
