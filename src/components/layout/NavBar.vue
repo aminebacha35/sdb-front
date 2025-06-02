@@ -36,10 +36,17 @@ function toggleMobileMenu() {
             Accueil
           </router-link>
           <router-link 
-            to="/appointment" 
+            to="/nos-services" 
             class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
             active-class="text-white font-bold"
-          >
+            >
+            Nos services 
+            </router-link>
+            <router-link
+              to="/appointment"
+              class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
+              active-class="text-white font-bold"
+            >
             Prendre RDV
           </router-link>
           <template v-if="authStore.isAuthenticated">
@@ -116,6 +123,14 @@ function toggleMobileMenu() {
           @click="mobileMenuOpen = false"
         >
           Accueil
+        </router-link>
+        <router-link
+          to="/nos-services"
+          class="text-white hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium"
+          active-class="text-white font-bold"
+          @click="mobileMenuOpen = false"
+        >
+          Nos services 
         </router-link>
         <router-link
           to="/appointment"
