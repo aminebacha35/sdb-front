@@ -20,52 +20,52 @@ function toggleMobileMenu() {
 <template>
   <nav class="bg-primary-700 shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex">
-          <div class="flex-shrink-0 flex items-center">
-            <router-link to="/" class="text-white font-bold text-xl">
-              <img src="/sdb.auto.centre.png" class="h-20 ml-3 my-2" />
-            </router-link>
-          </div>
-          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-            <router-link 
-              to="/" 
-              class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
-              active-class="text-white font-bold"
-            >
-              Accueil
-            </router-link>
-            <router-link 
-              to="/nos-services" 
-              class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
-              active-class="text-white font-bold"
-            >
-            Nos services 
-            </router-link>
-            <router-link
-              to="/appointment"
-              class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
-              active-class="text-white font-bold"
-            >
-              Prendre RDV
-            </router-link>
-            <template v-if="authStore.isAuthenticated">
-              <router-link 
-                to="/admin/appointments" 
-                class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
-                active-class="text-white font-bold"
-              >
-                Dashboard
-              </router-link>
-            </template>
-          </div>
+      <div class="relative flex items-center justify-center h-20">
+        <div class="absolute left-0 flex items-center">
+          <router-link to="/" class="text-white font-bold text-xl">
+            <img src="/sdb.auto.centre.png" class="w-40 ml-3 mt-7" />
+          </router-link>
         </div>
-        <div class="hidden sm:ml-6 sm:flex sm:items-center">
+
+        <div class="hidden sm:flex space-x-8">
+          <router-link 
+            to="/" 
+            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
+            active-class="text-white font-bold"
+          >
+            Accueil
+          </router-link>
+          <router-link 
+            to="/nos-services" 
+            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
+            active-class="text-white font-bold"
+          >
+            Nos services
+          </router-link>
+          <router-link 
+            to="/appointment" 
+            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
+            active-class="text-white font-bold"
+          >
+            Prendre RDV
+          </router-link>
           <template v-if="authStore.isAuthenticated">
-            <span class="text-white mr-4">{{ authStore.user?.name }}</span>
+            <router-link 
+              to="/admin/appointments" 
+              class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
+              active-class="text-white font-bold"
+            >
+              Dashboard
+            </router-link>
+          </template>
+        </div>
+
+        <div class="absolute right-0 hidden sm:flex items-center space-x-4">
+          <template v-if="authStore.isAuthenticated">
+            <span class="text-white">{{ authStore.user?.name }}</span>
             <button
               @click="handleLogout"
-              class="text-white bg-primary-800 hover:bg-primary-900 px-3 py-2 rounded-md text-sm font-medium"
+              class="text-white bg-primary-800 hover:bg-primary-900 px-3 py-2 rounded-md text-me text-xl font-medium"
             >
               Déconnexion
             </button>
@@ -73,13 +73,14 @@ function toggleMobileMenu() {
           <template v-else>
             <router-link
               to="/admin/login"
-              class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium"
+              class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
             >
               Admin
             </router-link>
           </template>
         </div>
-        <div class="-mr-2 flex items-center sm:hidden">
+
+        <div class="absolute right-0 sm:hidden flex items-center">
           <button
             @click="toggleMobileMenu"
             class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-gray-200 focus:outline-none"
@@ -122,6 +123,14 @@ function toggleMobileMenu() {
           @click="mobileMenuOpen = false"
         >
           Accueil
+        </router-link>
+        <router-link
+          to="/nos-services"
+          class="text-white hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium"
+          active-class="text-white font-bold"
+          @click="mobileMenuOpen = false"
+        >
+          Nos services
         </router-link>
         <router-link
           to="/appointment"
