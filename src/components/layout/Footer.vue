@@ -3,10 +3,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col md:flex-row justify-between">
         <div class="mb-6 md:mb-0">
-          <h2><img src="/sdb.auto.centre.png" class="w-40 ml-3" /></h2>
+          <h2><img src="/sdb.auto.centre.png" class="w-40 ml-32" /></h2>
         </div>
         
-        <div class="mb-6 md:mb-0">
+        <div class="mb-6 md:mb-0 ml-32 ">
           <h3 class="text-lg font-semibold mb-2">Nous contacter</h3>
           <p class="text-gray-300">51 Avenue de Volvire</p>
           <p class="text-gray-300">35490 Sens-de-bretagne</p>
@@ -14,7 +14,7 @@
           <p class="text-gray-300">Email: sdbauto@gmail.com</p>
         </div>
         
-        <div>
+        <div class="ml-32">
           <h3 class="text-lg font-semibold mb-2">Horaires d'ouverture</h3>
           <p class="text-gray-300">Lundi - Vendredi: 8h00 - 18h00</p>
           <p class="text-gray-300">Samedi: 9h00 - 16h00</p>
