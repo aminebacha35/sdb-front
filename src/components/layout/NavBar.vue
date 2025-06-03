@@ -18,12 +18,12 @@ function toggleMobileMenu() {
 </script>
 
 <template>
-  <nav class="bg-primary-700 shadow-md">
+  <nav class="bg-primary-700 shadow-md pt-4">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="relative flex items-center justify-center h-20">
         <div class="absolute left-0 flex items-center">
           <router-link to="/" class="text-white font-bold text-xl">
-            <img src="/sdb.auto.centre.png" class="w-40 ml-3 mt-7" />
+            <img src="/sdb.auto.centre.png" class="w-40 ml-3" />
           </router-link>
         </div>
 
