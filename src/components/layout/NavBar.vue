@@ -115,7 +115,7 @@ function toggleMobileMenu() {
     </div>
 
     <div v-if="mobileMenuOpen" class="sm:hidden">
-      <div class="pt-2 pb-3 space-y-1">
+      <div class="pt-2 pb-3 space-y-1 ml-9">
         <router-link
           to="/"
           class="text-white hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium"
