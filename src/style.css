@@ -128,13 +128,28 @@ h3 {
   @apply p-1;
 }
 
+/* Fond blanc pour la grille */
+.fc .fc-scrollgrid {
+  @apply bg-white;
+}
+
+/* Texte en noir */
+.fc td, .fc th, .fc .fc-daygrid-day-number {
+  @apply text-black; 
+}
+
+/* Texte en noir */
+.fc .fc-toolbar-title {
+  @apply text-black; 
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: rgba(255, 255, 255, 0.87);
     background-color: #1a1a1a;
   }
   .card {
-    @apply bg-gray-800;
+    @apply bg-gray-300;
   }
   .form-input, .form-select {
     @apply bg-gray-700 border-gray-600 text-white;

@@ -124,7 +124,7 @@ async function updateAppointmentStatus(id: string, status: 'pending' | 'confirme
 
 <template>
   <div>
-    <h2 class="text-xl font-bold mb-6">Calendrier des Rendez-vous</h2>
+    <h2 class="text-xl font-bold mb-6 text-primary-700">Calendrier des Rendez-vous</h2>
     
     <div v-if="isLoading" class="py-8 text-center">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-700 mx-auto"></div>

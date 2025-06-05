@@ -39,7 +39,7 @@ function handleCancel() {
 <template>
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="card p-6 md:p-8">
-      <h1 class="text-2xl font-bold mb-6">Prendre rendez-vous</h1>
+      <h1 class="text-2xl font-bold mb-6 text-black ">Prendre rendez-vous</h1>
       
       <div v-if="isLoading" class="py-8 text-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-700 mx-auto"></div>

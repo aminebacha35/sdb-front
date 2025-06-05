@@ -76,7 +76,7 @@ async function updateAppointmentStatus(id: string, status: 'pending' | 'confirme
 <template>
   <div>
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-      <h2 class="text-xl font-bold mb-4 sm:mb-0">Gestion des Rendez-vous</h2>
+      <h2 class="text-xl font-bold mb-4 sm:mb-0 text-primary-700">Gestion des Rendez-vous</h2>
       
       <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
         <!-- Status filter -->
