@@ -14,7 +14,7 @@ function navigateToAppointment() {
     <section class="py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold mb-4">Nos services de carrosserie</h2>
+          <h2 class="text-3xl text-black font-bold mb-4">Nos services de carrosserie</h2>
           <p class="text-gray-600 max-w-2xl mx-auto">
             Nous proposons une gamme complète de services pour l'entretien et la réparation de votre véhicule.
           </p>
@@ -22,7 +22,7 @@ function navigateToAppointment() {
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <!-- Service 1 -->
-          <div class="card p-6 hover:shadow-lg transition-shadow">
+          <div class="card p-6 hover:shadow-lg transition-shadow ">
             <div class="h-12 w-12 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center mb-4">
               <img src="/service1.png" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" />

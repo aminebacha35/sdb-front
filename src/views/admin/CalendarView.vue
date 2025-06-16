@@ -124,7 +124,7 @@ async function updateAppointmentStatus(id: string, status: 'pending' | 'confirme
 
 <template>
   <div>
-    <h2 class="text-xl font-bold mb-6">Calendrier des Rendez-vous</h2>
+    <h2 class="text-xl font-bold mb-6 text-primary-700">Calendrier des Rendez-vous</h2>
     
     <div v-if="isLoading" class="py-8 text-center">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-700 mx-auto"></div>
@@ -138,7 +138,7 @@ async function updateAppointmentStatus(id: string, status: 'pending' | 'confirme
       <div v-if="showEventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white rounded-lg shadow-xl max-w-md mx-4 w-full animate-fade-in">
           <div class="px-6 py-4 border-b flex justify-between items-center">
-            <h3 class="text-lg font-medium">Détails du rendez-vous</h3>
+            <h3 class="text-lg font-medium text-black">Détails du rendez-vous</h3>
             <button @click="closeEventModal" class="text-gray-400 hover:text-gray-500">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -146,7 +146,7 @@ async function updateAppointmentStatus(id: string, status: 'pending' | 'confirme
             </button>
           </div>
           
-          <div class="p-6">
+          <div class="p-6 text-black">
             <h4 class="font-bold mb-2">{{ selectedEvent?.title }}</h4>
             
             <p class="mb-2">

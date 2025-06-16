@@ -32,10 +32,10 @@ function getIcon(iconName: string) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-100">
-    <header class="bg-white shadow">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <h1 class="text-2xl font-bold text-gray-900">
+  <div class="min-h-screen bg-white">
+    <header class="bg-gray-300 shadow">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 bg-gray-300">
+        <h1 class="text-2xl font-bold text-gray-700">
           Dashboard Admin
         </h1>
       </div>
@@ -45,10 +45,10 @@ function getIcon(iconName: string) {
       <div class="flex flex-col md:flex-row">
         <!-- Sidebar -->
         <div class="w-full md:w-64 mb-6 md:mb-0">
-          <div class="bg-white shadow rounded-lg overflow-hidden">
+          <div class="bg-gray-300 shadow rounded-lg overflow-hidden">
             <div class="p-4 border-b">
-              <div class="font-medium">{{ authStore.user?.name }}</div>
-              <div class="text-sm text-gray-500">{{ authStore.user?.email }}</div>
+              <div class="font-medium text-primary-800">{{ authStore.user?.name }}</div>
+              <div class="text-sm text-gray-700">{{ authStore.user?.email }}</div>
             </div>
             
             <nav class="p-4">
@@ -70,7 +70,7 @@ function getIcon(iconName: string) {
         
         <!-- Main content -->
         <div class="md:ml-8 flex-1">
-          <div class="bg-white shadow rounded-lg p-6">
+          <div class="bg-gray-300 shadow rounded-lg p-6">
             <RouterView />
           </div>
         </div>

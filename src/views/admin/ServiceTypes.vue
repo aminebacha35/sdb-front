@@ -75,8 +75,8 @@ async function handleDelete(id: string) {
 
 <template>
   <div>
-    <div class="mb-6 flex justify-between items-center">
-      <h2 class="text-xl font-bold">Types de Services</h2>
+    <div class="mb-6 flex justify-between items-center ">
+      <h2 class="text-xl font-bold text-primary-700">Types de Services</h2>
       <button @click="openAddModal" class="btn">
         Ajouter un service
       </button>
