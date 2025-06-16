@@ -23,28 +23,28 @@ function toggleMobileMenu() {
       <div class="relative flex items-center justify-center h-20">
         <div class="absolute left-0 flex items-center">
           <router-link to="/" class="text-white font-bold text-xl">
-            <img src="/sdb.auto.centre.png" class="w-40 ml-3" />
+            <img src="/sdb.auto.centre.png" class="w-40 ml-3 transition-transform duration-150 hover:scale-105 active:scale-95"> 
           </router-link>
         </div>
 
         <div class="hidden sm:flex space-x-8">
           <router-link 
             to="/" 
-            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
+            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium transition-transform duration-150 hover:scale-105 active:scale-95"
             active-class="text-white font-bold"
           >
             Accueil
           </router-link>
           <router-link 
             to="/nos-services" 
-            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
+            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium transition-transform duration-150 hover:scale-105 active:scale-95"
             active-class="text-white font-bold"
           >
             Nos services
           </router-link>
           <router-link 
             to="/appointment" 
-            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
+            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium transition-transform duration-150 hover:scale-105 active:scale-95"
             active-class="text-white font-bold"
           >
             Prendre RDV
@@ -52,7 +52,7 @@ function toggleMobileMenu() {
           <template v-if="authStore.isAuthenticated">
             <router-link 
               to="/admin/appointments" 
-              class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
+              class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium transition-transform duration-150 hover:scale-105 active:scale-95"
               active-class="text-white font-bold"
             >
               Dashboard
@@ -65,7 +65,7 @@ function toggleMobileMenu() {
             <span class="text-white">{{ authStore.user?.name }}</span>
             <button
               @click="handleLogout"
-              class="text-white bg-primary-800 hover:bg-primary-900 px-3 py-2 rounded-md text-me text-xl font-medium"
+              class="text-white bg-primary-800 hover:bg-primary-900 px-3 py-2 rounded-md text-me text-xl font-medium transition-transform duration-150 hover:scale-105 active:scale-95"
             >
               Déconnexion
             </button>

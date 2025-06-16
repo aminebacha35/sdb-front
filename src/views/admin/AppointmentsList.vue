@@ -82,7 +82,7 @@ async function updateAppointmentStatus(id: string, status: 'pending' | 'confirme
         <!-- Status filter -->
         <select 
           v-model="statusFilter"
-          class="form-select"
+          class="form-select transition-transform duration-150 hover:scale-105 active:scale-95">
         >
           <option value="all">Tous les statuts</option>
           <option value="pending">En attente</option>
@@ -95,7 +95,7 @@ async function updateAppointmentStatus(id: string, status: 'pending' | 'confirme
         <input 
           type="date" 
           v-model="dateFilter"
-          class="form-input"
+          class="form-input transition-transform duration-150 hover:scale-105 active:scale-95">
         />
       </div>
     </div>

@@ -219,8 +219,8 @@ async function handleSubmit() {
     </div>
 
     <div class="flex justify-end space-x-3">
-      <button type="button" class="btn btn-secondary" @click="emit('cancel')">Annuler</button>
-      <button type="submit" class="btn" :disabled="isSubmitting">
+      <button type="button" class="btn btn-secondary transition-transform duration-150 hover:scale-105 active:scale-95" @click="emit('cancel')">Annuler</button>
+      <button type="submit" class="btn transition-transform duration-150 hover:scale-105 active:scale-95" :disabled="isSubmitting">
         {{ props.editMode ? 'Mettre à jour' : 'Prendre rendez-vous' }}
       </button>
     </div>

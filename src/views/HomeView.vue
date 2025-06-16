@@ -21,7 +21,7 @@ function navigateToAppointment() {
             Entretien, réparation et diagnostic par des professionnels qualifiés. 
             Prenez rendez-vous en ligne en quelques clics.
           </p>
-          <button @click="navigateToAppointment" class="btn-link bg-white text-primary-700 hover:bg-gray-400 px-8 py-3 text-lg">
+          <button @click="navigateToAppointment" class="btn-link bg-white text-primary-700 hover:bg-gray-400 px-8 py-3 text-lgtransition-transform duration-150 hover:scale-105 active:scale-95">
             Prendre rendez-vous
           </button>
         </div>
@@ -52,7 +52,7 @@ function navigateToAppointment() {
             <p class="text-gray-600 mb-4">
               Maintenez votre véhicule en parfait état avec nos services d'entretien régulier, incluant vidanges, filtres, et contrôles essentiels.
             </p>
-            <button @click="navigateToAppointment" class="text-primary-700 font-medium hover:text-primary-800">
+            <button @click="navigateToAppointment" class="text-primary-700 font-medium hover:text-primary-800 transition-transform duration-150 hover:scale-105 active:scale-95">
               Prendre rendez-vous →
             </button>
           </div>
@@ -68,7 +68,7 @@ function navigateToAppointment() {
             <p class="text-gray-600 mb-4">
               Des équipements de diagnostic de pointe pour identifier et résoudre rapidement tout problème sur votre véhicule.
             </p>
-            <button @click="navigateToAppointment" class="text-primary-700 font-medium hover:text-primary-800">
+            <button @click="navigateToAppointment" class="text-primary-700 font-medium hover:text-primary-800 transition-transform duration-150 hover:scale-105 active:scale-95">
               Prendre rendez-vous →
             </button>
           </div>
@@ -85,7 +85,7 @@ function navigateToAppointment() {
             <p class="text-gray-600 mb-4">
               Remplacement, équilibrage et permutation de pneus pour une sécurité et des performances optimales.
             </p>
-            <button @click="navigateToAppointment" class="text-primary-700 font-medium hover:text-primary-800">
+            <button @click="navigateToAppointment" class="text-primary-700 font-medium hover:text-primary-800 transition-transform duration-150 hover:scale-105 active:scale-95">
               Prendre rendez-vous →
             </button>
           </div>
@@ -98,7 +98,7 @@ function navigateToAppointment() {
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
           <h2 class="text-3xl text-black font-bold mb-4">Pourquoi Nous Choisir</h2>
-          <p class="text-gray-600 max-w-2xl mx-auto">
+          <p class="text-gray-600 max-w-2xl mx-auto ">
             Notre équipe de professionnels s'engage à vous offrir un service d'excellence pour votre véhicule.
           </p>
         </div>
@@ -112,7 +112,7 @@ function navigateToAppointment() {
               </svg>
             </div>
             <h3 class="text-lg text-black font-bold mb-2">Expertise Certifiée</h3>
-            <p class="text-gray-600">
+            <p class="text-gray-600 transition-transform duration-150 hover:scale-105 active:scale-95">
               Techniciens certifiés avec des années d'expérience dans l'industrie automobile.
             </p>
           </div>
@@ -168,7 +168,7 @@ function navigateToAppointment() {
             <p class="text-lg mb-8 max-w-3xl mx-auto">
               Notre système de réservation en ligne vous permet de choisir le jour et l'heure qui vous conviennent le mieux.
             </p>
-            <button @click="navigateToAppointment" class="btn-link bg-white text-primary-700 hover:bg-gray-400 px-8 py-3 text-lg">
+            <button @click="navigateToAppointment" class="btn-link bg-white text-primary-700 hover:bg-gray-400 px-8 py-3 text-lgtransition-transform duration-150 hover:scale-105 active:scale-95">
               Réserver maintenant
             </button>
           </div>
