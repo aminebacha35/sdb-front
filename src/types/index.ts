@@ -4,7 +4,7 @@ export interface User {
   email: string
 }
 
-export type AppointmentStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled'
+export type AppointmentStatus = 'pending' | 'confirmed' | 'cancelled'
 export type NewAppointment = Omit<Appointment, 'id' | 'status' | 'service_type' | 'created_at' | 'updated_at'>
 
 

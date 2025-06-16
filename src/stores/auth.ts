@@ -2,11 +2,11 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { User } from '../types'
 import { apiLogin, apiLogout } from '../services/api'
+import Cookies from 'js-cookie'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
 
-  // Restore session from localStorage (minimal data only)
   try {
     const stored = localStorage.getItem('user')
     if (stored) {
@@ -24,24 +24,44 @@ export const useAuthStore = defineStore('auth', () => {
   const isAuthenticated = computed(() => !!user.value)
 
   async function login(email: string, password: string) {
-    const response = await apiLogin(email, password)
+    try {
+      const response = await apiLogin(email, password)
 
-    user.value = {
-      id: response.user.id,
-      name: response.user.name,
-      email: response.user.email,
+      user.value = {
+        id: response.user.id,
+        name: response.user.name,
+        email: response.user.email,
+      }
+
+      localStorage.setItem('user', JSON.stringify(user.value))
+      return true
+    } catch (error) {
+      console.error('Erreur lors de la connexion:', error)
+      user.value = null
+      localStorage.removeItem('user')
+      throw error
     }
-
-    localStorage.setItem('user', JSON.stringify(user.value))
-
-    return true
   }
 
   async function logout() {
-    await apiLogout()
-    user.value = null
-    localStorage.removeItem('user')
-    return true
+    try {
+      await apiLogout()
+      user.value = null
+      localStorage.removeItem('user')
+      // Nettoyer tous les cookies
+      Object.keys(Cookies.get()).forEach(cookieName => {
+        Cookies.remove(cookieName)
+      })
+      return true
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion:', error)
+      user.value = null
+      localStorage.removeItem('user')
+      Object.keys(Cookies.get()).forEach(cookieName => {
+        Cookies.remove(cookieName)
+      })
+      return false
+    }
   }
 
   return {

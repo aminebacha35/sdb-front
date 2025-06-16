@@ -1,39 +1,54 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useAppointmentsStore } from '../../stores/appointments'
-import AppointmentCard from '../../components/ui/AppointmentCard.vue'
-import AppointmentForm from '../../components/ui/AppointmentForm.vue'
-import type { Appointment } from '../../types'
+import type { Appointment, AppointmentStatus } from '../../types'
 
 const appointmentsStore = useAppointmentsStore()
 const isLoading = ref(true)
-
-// For edit modal
-const showEditModal = ref(false)
-const editingAppointment = ref<Appointment | null>(null)
-
-// For filters
-const statusFilter = ref<string>('all')
+const statusFilter = ref('all')
 const dateFilter = ref('')
 
+const statusColors = {
+  pending: '#F59E0B',
+  confirmed: '#10B981',
+  cancelled: '#EF4444'
+} as const
+
+// Fonction pour traduire les statuts en français
+function translateStatus(status: AppointmentStatus): string {
+  const translations = {
+    pending: 'En attente',
+    confirmed: 'Confirmé',
+    cancelled: 'Annulé'
+  }
+  return translations[status] || status
+}
+
 const filteredAppointments = computed(() => {
-  let filtered = [...appointmentsStore.appointments]
-  
-  // Filter by status
+  let filtered = appointmentsStore.appointments
+
   if (statusFilter.value !== 'all') {
-    filtered = filtered.filter(a => a.status === statusFilter.value)
+    filtered = filtered.filter(appointment => appointment.status === statusFilter.value)
   }
-  
-  // Filter by date
+
   if (dateFilter.value) {
-    filtered = filtered.filter(a => a.appointment_time.startsWith(dateFilter.value))
+    const filterDate = new Date(dateFilter.value)
+    filtered = filtered.filter(appointment => {
+      const appointmentDate = new Date(appointment.appointment_time)
+      return appointmentDate.toDateString() === filterDate.toDateString()
+    })
   }
-  
-  // Sort by appointment date (most recent first)
-  filtered.sort((a, b) => new Date(a.appointment_time).getTime() - new Date(b.appointment_time).getTime())
-  
+
   return filtered
 })
+
+async function updateAppointmentStatus(id: string, status: AppointmentStatus) {
+  try {
+    await appointmentsStore.updateAppointmentById(id, { status })
+  } catch (error) {
+    console.error(`Failed to update appointment status to ${status}:`, error)
+  }
+}
 
 onMounted(async () => {
   try {
@@ -44,58 +59,31 @@ onMounted(async () => {
     isLoading.value = false
   }
 })
-
-function openEditModal(appointment: Appointment) {
-  editingAppointment.value = appointment
-  showEditModal.value = true
-}
-
-function closeEditModal() {
-  showEditModal.value = false
-  editingAppointment.value = null
-}
-
-async function handleSaveEdit(appointment: Appointment) {
-  try {
-    await appointmentsStore.updateAppointmentById(appointment.id, appointment)
-    closeEditModal()
-  } catch (error) {
-    console.error('Failed to update appointment:', error)
-  }
-}
-
-async function updateAppointmentStatus(id: string, status: 'pending' | 'confirmed' | 'completed' | 'cancelled') {
-  try {
-    await appointmentsStore.updateAppointmentById(id, { status })
-  } catch (error) {
-    console.error(`Failed to update appointment status to ${status}:`, error)
-  }
-}
 </script>
 
 <template>
   <div>
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-      <h2 class="text-xl font-bold mb-4 sm:mb-0 text-primary-700">Gestion des Rendez-vous</h2>
+      <h2 class="text-xl font-bold mb-4 sm:mb-0 text-primary-700">Liste des Rendez-vous</h2>
       
       <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
         <!-- Status filter -->
         <select 
           v-model="statusFilter"
-          class="form-select"
+          class="form-select bg-white text-gray-900"
         >
           <option value="all">Tous les statuts</option>
           <option value="pending">En attente</option>
-          <option value="confirmed">Confirmés</option>
-          <option value="completed">Terminés</option>
-          <option value="cancelled">Annulés</option>
+          <option value="confirmed">Confirmé</option>
+          <option value="cancelled">Annulé</option>
         </select>
         
         <!-- Date filter -->
         <input 
           type="date" 
           v-model="dateFilter"
-          class="form-input"
+          class="form-input bg-white text-gray-900"
+          :min="new Date().toISOString().split('T')[0]"
         />
       </div>
     </div>
@@ -105,39 +93,84 @@ async function updateAppointmentStatus(id: string, status: 'pending' | 'confirme
       <p class="mt-4 text-gray-600">Chargement des rendez-vous...</p>
     </div>
     
-    <div v-else-if="filteredAppointments.length === 0" class="py-8 text-center bg-gray-50 rounded-lg">
-      <p class="text-gray-500">Aucun rendez-vous trouvé</p>
-    </div>
-    
-    <div v-else>
-      <AppointmentCard
-        v-for="appointment in filteredAppointments"
-        :key="appointment.id"
-        :appointment="appointment"
-        @edit="openEditModal"
-        @cancel="updateAppointmentStatus($event, 'cancelled')"
-        @complete="updateAppointmentStatus($event, 'completed')"
-        @confirm="updateAppointmentStatus($event, 'confirmed')"
-      />
-    </div>
-    
-    <!-- Edit modal -->
-    <div v-if="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 animate-fade-in">
-        <div class="px-6 py-4 border-b">
-          <h3 class="text-lg font-medium">Modifier le rendez-vous</h3>
-        </div>
-        
-        <div class="p-6">
-          <AppointmentForm
-            v-if="editingAppointment"
-            :edit-mode="true"
-            :appointment="editingAppointment"
-            @saved="handleSaveEdit"
-            @cancel="closeEditModal"
-          />
+    <div v-else class="grid gap-4">
+      <div v-for="appointment in filteredAppointments" :key="appointment.id" class="bg-white rounded-lg shadow p-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <div class="mb-4 sm:mb-0">
+            <h3 class="text-lg font-semibold text-gray-900">{{ appointment.service_type?.name || 'Service non spécifié' }}</h3>
+            <p class="text-gray-700">{{ new Date(appointment.appointment_time).toLocaleString('fr-FR', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            }) }}</p>
+            <p class="text-gray-700">{{ appointment.vehicle }}</p>
+          </div>
+          
+          <div class="flex flex-col sm:items-end space-y-2">
+            <div class="flex items-center space-x-2">
+              <div class="w-3 h-3 rounded-full" :style="{ backgroundColor: statusColors[appointment.status] }"></div>
+              <span class="text-sm text-gray-700">{{ translateStatus(appointment.status) }}</span>
+            </div>
+            
+            <div class="flex space-x-2">
+              <template v-if="appointment.status === 'pending'">
+                <button 
+                  @click="updateAppointmentStatus(appointment.id, 'confirmed')"
+                  class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                >
+                  Confirmer
+                </button>
+              </template>
+              
+              <template v-if="appointment.status !== 'cancelled'">
+                <button 
+                  @click="updateAppointmentStatus(appointment.id, 'cancelled')"
+                  class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Annuler
+                </button>
+              </template>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.form-select,
+.form-input {
+  @apply border border-gray-300 rounded-md shadow-sm;
+}
+
+.form-select:focus,
+.form-input:focus {
+  @apply ring-2 ring-primary-500 border-primary-500;
+}
+
+/* Style pour le sélecteur de date */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  @apply text-gray-700;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+  @apply text-gray-700;
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+  @apply text-gray-700;
+}
+
+input[type="date"]::-webkit-datetime-edit-text {
+  @apply text-gray-700;
+}
+
+input[type="date"]::-webkit-datetime-edit-year-field,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field {
+  @apply text-gray-700;
+}
+</style>

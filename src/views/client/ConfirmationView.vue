@@ -2,8 +2,6 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAppointmentsStore } from '../../stores/appointments'
-import { format } from 'date-fns'
-import { fr } from 'date-fns/locale'
 
 const route = useRoute()
 const router = useRouter()
@@ -17,7 +15,12 @@ const error = ref('')
 const formattedDate = computed(() => {
   if (!appointment.value?.appointment_time) return ''
   try {
-    return format(new Date(appointment.value.appointment_time), 'EEEE d MMMM yyyy', { locale: fr })
+    return new Date(appointment.value.appointment_time).toLocaleDateString('fr-FR', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    })
   } catch {
     return ''
   }
@@ -26,7 +29,10 @@ const formattedDate = computed(() => {
 const formattedTime = computed(() => {
   if (!appointment.value?.appointment_time) return ''
   try {
-    return format(new Date(appointment.value.appointment_time), 'HH:mm')
+    return new Date(appointment.value.appointment_time).toLocaleTimeString('fr-FR', {
+      hour: '2-digit',
+      minute: '2-digit'
+    })
   } catch {
     return ''
   }
@@ -91,7 +97,7 @@ onMounted(async () => {
             <p class="mb-2"><span class="font-medium">Email:</span> {{ appointment?.email }}</p>
             <p class="mb-2"><span class="font-medium">Téléphone:</span> {{ appointment?.phone }}</p>
             <p class="mb-2"><span class="font-medium">Véhicule:</span> {{ appointment?.vehicle }}</p>
-            <p class="mb-2"><span class="font-medium">Service:</span> {{ appointment?.service_type.name }}</p>
+            <p class="mb-2"><span class="font-medium">Service:</span> {{ appointment?.service_type?.name || 'Service non spécifié' }}</p>
             <p class="mb-2"><span class="font-medium">Date:</span> {{ formattedDate }}</p>
             <p><span class="font-medium">Heure:</span> {{ formattedTime }}</p>
           </div>

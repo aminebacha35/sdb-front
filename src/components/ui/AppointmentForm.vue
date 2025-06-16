@@ -2,7 +2,7 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import { useServiceTypesStore } from '../../stores/serviceTypes'
 import { useAppointmentsStore } from '../../stores/appointments'
-import type { ServiceType, TimeSlot, Appointment } from '../../types'
+import type { TimeSlot, Appointment } from '../../types'
 import { format } from 'date-fns'
 
 const props = defineProps<{
@@ -11,7 +11,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  saved: [appointment: Appointment]
+  saved: [appointment: Appointment | null]
   cancel: []
 }>()
 
@@ -31,6 +31,7 @@ const form = ref({
 const timeSlots = ref<TimeSlot[]>([])
 const isSubmitting = ref(false)
 const errorMessage = ref('')
+const successMessage = ref('')
 const isLoadingTimeSlots = ref(false)
 
 // Initialize form when in edit mode
@@ -99,6 +100,7 @@ function selectTimeSlot(time: string) {
 
 async function handleSubmit() {
   errorMessage.value = ''
+  successMessage.value = ''
   isSubmitting.value = true
 
   try {
@@ -116,20 +118,23 @@ async function handleSubmit() {
     const appointmentTime = format(date, 'yyyy-MM-dd HH:mm:ss')
 
     if (props.editMode && props.appointment) {
-      const updated = await appointmentsStore.updateAppointmentById(
+      const appointmentData = {
+        id: props.appointment.id,
+        name: form.value.name,
+        email: form.value.email,
+        phone: form.value.phone,
+        vehicle: form.value.vehicle,
+        service_type_id: form.value.service_type_id,
+        appointment_time: appointmentTime
+      }
+      await appointmentsStore.updateAppointmentById(
         props.appointment.id,
-        {
-          name: form.value.name,
-          email: form.value.email,
-          phone: form.value.phone,
-          vehicle: form.value.vehicle,
-          service_type_id: form.value.service_type_id,
-          appointment_time: appointmentTime
-        }
+        appointmentData
       )
-      emit('saved', updated)
+      successMessage.value = 'Le rendez-vous a été mis à jour avec succès'
+      emit('saved', props.appointment)
     } else {
-      const newAppointment = await appointmentsStore.addAppointment({
+      await appointmentsStore.addAppointment({
         name: form.value.name,
         email: form.value.email,
         phone: form.value.phone,
@@ -137,11 +142,23 @@ async function handleSubmit() {
         service_type_id: form.value.service_type_id,
         appointment_time: appointmentTime
       })
-      emit('saved', newAppointment)
+      successMessage.value = 'Votre rendez-vous a été enregistré avec succès. Un email de confirmation vous sera envoyé.'
+      // Réinitialiser le formulaire après un ajout réussi
+      form.value = {
+        name: '',
+        email: '',
+        phone: '',
+        vehicle: '',
+        service_type_id: '',
+        appointment_date: format(new Date(), 'yyyy-MM-dd'),
+        appointment_time: ''
+      }
+      timeSlots.value = []
+      emit('saved', null)
     }
   } catch (error) {
-    console.error(error)
-    errorMessage.value = 'Une erreur est survenue lors de l\'enregistrement du rendez-vous'
+    console.error('Erreur lors de la soumission du formulaire:', error)
+    errorMessage.value = 'Une erreur est survenue lors de la sauvegarde'
   } finally {
     isSubmitting.value = false
   }
@@ -152,6 +169,10 @@ async function handleSubmit() {
   <form @submit.prevent="handleSubmit" class="space-y-6">
     <div v-if="errorMessage" class="bg-error-50 border border-error-500 text-error-700 p-3 rounded">
       {{ errorMessage }}
+    </div>
+
+    <div v-if="successMessage" class="bg-success-50 border border-success-500 text-success-700 p-3 rounded">
+      {{ successMessage }}
     </div>
 
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">

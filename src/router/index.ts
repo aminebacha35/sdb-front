@@ -10,6 +10,7 @@ import CalendarView from '../views/admin/CalendarView.vue'
 import ServiceTypes from '../views/admin/ServiceTypes.vue'
 import NotFound from '../views/NotFound.vue'
 import ServiceView from '../views/client/ServiceView.vue'
+import StatsView from '../views/admin/StatsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,6 +65,12 @@ const router = createRouter({
           path: 'services',
           name: 'services',
           component: ServiceTypes
+        },
+        {
+          path: 'stats',
+          name: 'admin-stats',
+          component: StatsView,
+          meta: { title: 'Statistiques' }
         }
       ]
     },

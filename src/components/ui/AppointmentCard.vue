@@ -27,7 +27,6 @@ const statusClass = computed(() => {
   switch(props.appointment.status) {
     case 'pending': return 'bg-warning-50 text-warning-700 border-warning-500'
     case 'confirmed': return 'bg-success-50 text-success-700 border-success-500'
-    case 'completed': return 'bg-primary-50 text-primary-700 border-primary-500'
     case 'cancelled': return 'bg-error-50 text-error-700 border-error-500'
     default: return 'bg-gray-50 text-gray-700 border-gray-500'
   }
@@ -37,7 +36,6 @@ const statusText = computed(() => {
   switch(props.appointment.status) {
     case 'pending': return 'En attente'
     case 'confirmed': return 'Confirmé'
-    case 'completed': return 'Terminé'
     case 'cancelled': return 'Annulé'
     default: return 'Inconnu'
   }
@@ -54,7 +52,7 @@ const statusText = computed(() => {
           <span class="font-medium">Véhicule:</span> {{ appointment.vehicle }}
         </p>
         <p>
-          <span class="font-medium">Service:</span> {{ appointment.service_type.name }}
+          <span class="font-medium">Service:</span> {{ appointment.service_type?.name || 'Non spécifié' }}
         </p>
         <p>
           <span class="font-medium">Date:</span> {{ formattedDate }}
@@ -70,13 +68,6 @@ const statusText = computed(() => {
         </span>
         
         <div class="mt-4 space-y-2">
-          <button 
-            @click="emit('edit', appointment)" 
-            class="btn btn-secondary text-sm px-3 py-1 w-full"
-          >
-            Modifier
-          </button>
-          
           <template v-if="appointment.status === 'pending'">
             <button 
               @click="emit('confirm', appointment.id)" 
@@ -86,16 +77,7 @@ const statusText = computed(() => {
             </button>
           </template>
           
-          <template v-if="appointment.status === 'confirmed'">
-            <button 
-              @click="emit('complete', appointment.id)" 
-              class="btn btn-primary text-sm px-3 py-1 w-full"
-            >
-              Marquer terminé
-            </button>
-          </template>
-          
-          <template v-if="appointment.status !== 'cancelled' && appointment.status !== 'completed'">
+          <template v-if="appointment.status !== 'cancelled'">
             <button 
               @click="emit('cancel', appointment.id)" 
               class="btn btn-error text-sm px-3 py-1 w-full"

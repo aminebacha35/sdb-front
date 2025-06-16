@@ -1,19 +1,29 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useAppointmentsStore } from '../../stores/appointments'
 import { useServiceTypesStore } from '../../stores/serviceTypes'
 import AppointmentForm from '../../components/ui/AppointmentForm.vue'
-import type { Appointment } from '../../types'
+import type { Appointment, AppointmentStatus } from '../../types'
 
 // FullCalendar imports
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import frLocale from '@fullcalendar/core/locales/fr'
 
 const appointmentsStore = useAppointmentsStore()
 const serviceTypesStore = useServiceTypesStore()
 const isLoading = ref(true)
+const showEventModal = ref(false)
+const selectedEvent = ref<any>(null)
+
+const statusColors = {
+  pending: '#F59E0B',
+  confirmed: '#10B981',
+  cancelled: '#EF4444'
+} as const
+
 const calendarOptions = ref({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
   initialView: 'timeGridWeek',
@@ -22,30 +32,36 @@ const calendarOptions = ref({
     center: 'title',
     right: 'dayGridMonth,timeGridWeek,timeGridDay'
   },
-  events: [],
-  locale: 'fr',
+  locale: frLocale,
   slotMinTime: '08:00:00',
-  slotMaxTime: '19:00:00',
-  businessHours: {
-    daysOfWeek: [1, 2, 3, 4, 5, 6], // Monday to Saturday
-    startTime: '08:00',
-    endTime: '18:00',
-  },
+  slotMaxTime: '18:00:00',
+  allDaySlot: false,
+  slotDuration: '00:30:00',
   height: 'auto',
-  eventClick: handleEventClick,
+  events: appointmentsStore.appointmentsForCalendar,
+  eventClick: (info: any) => {
+    selectedEvent.value = {
+      id: info.event.id,
+      title: info.event.title,
+      start: info.event.start,
+      end: info.event.end,
+      email: info.event.extendedProps.email,
+      phone: info.event.extendedProps.phone,
+      vehicle: info.event.extendedProps.vehicle,
+      status: info.event.extendedProps.status
+    }
+    showEventModal.value = true
+  },
+  businessHours: {
+    daysOfWeek: [1, 2, 3, 4, 5, 6],
+    startTime: '08:00',
+    endTime: '18:00'
+  },
   editable: false,
   selectable: true,
   selectMirror: true,
-  dayMaxEvents: true,
+  dayMaxEvents: true
 })
-
-// For event details modal
-const showEventModal = ref(false)
-const selectedEvent = ref<any>(null)
-
-// For edit appointment modal
-const showEditModal = ref(false)
-const editingAppointment = ref<Appointment | null>(null)
 
 onMounted(async () => {
   try {
@@ -54,7 +70,8 @@ onMounted(async () => {
     }
     
     await appointmentsStore.loadAppointments()
-    updateCalendarEvents()
+    // Mettre à jour les événements après le chargement
+    calendarOptions.value.events = appointmentsStore.appointmentsForCalendar
   } catch (error) {
     console.error('Failed to load data:', error)
   } finally {
@@ -62,59 +79,14 @@ onMounted(async () => {
   }
 })
 
-function updateCalendarEvents() {
-  calendarOptions.value.events = appointmentsStore.appointmentsForCalendar
-}
-
-function handleEventClick(info: any) {
-  selectedEvent.value = {
-    id: info.event.id,
-    title: info.event.title,
-    start: info.event.start,
-    status: info.event.extendedProps.status,
-    email: info.event.extendedProps.email,
-    phone: info.event.extendedProps.phone,
-    vehicle: info.event.extendedProps.vehicle,
-  }
-  
-  showEventModal.value = true
-}
-
 function closeEventModal() {
   showEventModal.value = false
   selectedEvent.value = null
 }
 
-function openEditModal() {
-  if (selectedEvent.value) {
-    const appointment = appointmentsStore.appointments.find(a => a.id === selectedEvent.value.id)
-    if (appointment) {
-      editingAppointment.value = appointment
-      showEditModal.value = true
-      closeEventModal()
-    }
-  }
-}
-
-function closeEditModal() {
-  showEditModal.value = false
-  editingAppointment.value = null
-}
-
-async function handleSaveEdit(appointment: Appointment) {
-  try {
-    await appointmentsStore.updateAppointmentById(appointment.id, appointment)
-    updateCalendarEvents()
-    closeEditModal()
-  } catch (error) {
-    console.error('Failed to update appointment:', error)
-  }
-}
-
-async function updateAppointmentStatus(id: string, status: 'pending' | 'confirmed' | 'completed' | 'cancelled') {
+async function updateAppointmentStatus(id: string, status: AppointmentStatus) {
   try {
     await appointmentsStore.updateAppointmentById(id, { status })
-    updateCalendarEvents()
     closeEventModal()
   } catch (error) {
     console.error(`Failed to update appointment status to ${status}:`, error)
@@ -124,133 +96,94 @@ async function updateAppointmentStatus(id: string, status: 'pending' | 'confirme
 
 <template>
   <div>
-    <h2 class="text-xl font-bold mb-6 text-primary-700">Calendrier des Rendez-vous</h2>
+    <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <h2 class="text-xl font-bold mb-4 sm:mb-0 text-primary-700">Calendrier des Rendez-vous</h2>
+      
+      <div class="flex items-center space-x-4">
+        <div class="flex items-center space-x-2">
+          <div class="w-3 h-3 rounded-full" :style="{ backgroundColor: statusColors.pending }"></div>
+          <span class="text-sm">En attente</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <div class="w-3 h-3 rounded-full" :style="{ backgroundColor: statusColors.confirmed }"></div>
+          <span class="text-sm">Confirmé</span>
+        </div>
+        <div class="flex items-center space-x-2">
+          <div class="w-3 h-3 rounded-full" :style="{ backgroundColor: statusColors.cancelled }"></div>
+          <span class="text-sm">Annulé</span>
+        </div>
+      </div>
+    </div>
     
     <div v-if="isLoading" class="py-8 text-center">
       <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-700 mx-auto"></div>
       <p class="mt-4 text-gray-600">Chargement du calendrier...</p>
     </div>
     
-    <div v-else class="animate-fade-in">
+    <div v-else class="bg-white rounded-lg shadow">
       <FullCalendar :options="calendarOptions" />
-      
-      <!-- Event details modal -->
-      <div v-if="showEventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg shadow-xl max-w-md mx-4 w-full animate-fade-in">
-          <div class="px-6 py-4 border-b flex justify-between items-center">
-            <h3 class="text-lg font-medium text-black">Détails du rendez-vous</h3>
-            <button @click="closeEventModal" class="text-gray-400 hover:text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+    </div>
+
+    <!-- Modal pour les détails du rendez-vous -->
+    <div v-if="showEventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div class="bg-white rounded-lg p-6 max-w-md w-full shadow-xl">
+        <div class="flex justify-between items-start mb-4">
+          <h3 class="text-xl font-bold text-gray-900">{{ selectedEvent?.title }}</h3>
+          <button @click="closeEventModal" class="text-gray-500 hover:text-gray-700">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        <div class="space-y-4">
+          <div>
+            <span class="font-semibold text-gray-700">Date:</span>
+            <p class="text-gray-900">{{ new Date(selectedEvent?.start).toLocaleString('fr-FR') }}</p>
           </div>
-          
-          <div class="p-6 text-black">
-            <h4 class="font-bold mb-2">{{ selectedEvent?.title }}</h4>
-            
-            <p class="mb-2">
-              <span class="font-medium">Date:</span> 
-              {{ new Date(selectedEvent?.start).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) }}
-            </p>
-            
-            <p class="mb-2">
-              <span class="font-medium">Heure:</span> 
-              {{ new Date(selectedEvent?.start).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) }}
-            </p>
-            
-            <p class="mb-2">
-              <span class="font-medium">Email:</span> {{ selectedEvent?.email }}
-            </p>
-            
-            <p class="mb-2">
-              <span class="font-medium">Téléphone:</span> {{ selectedEvent?.phone }}
-            </p>
-            
-            <p class="mb-4">
-              <span class="font-medium">Véhicule:</span> {{ selectedEvent?.vehicle }}
-            </p>
-            
-            <div class="pt-4 border-t flex justify-between">
-              <div>
-                <span 
-                  :class="[
-                    'px-2 py-1 text-xs font-semibold rounded-full border',
-                    {
-                      'bg-warning-50 text-warning-700 border-warning-500': selectedEvent?.status === 'pending',
-                      'bg-success-50 text-success-700 border-success-500': selectedEvent?.status === 'confirmed',
-                      'bg-primary-50 text-primary-700 border-primary-500': selectedEvent?.status === 'completed',
-                      'bg-error-50 text-error-700 border-error-500': selectedEvent?.status === 'cancelled',
-                    }
-                  ]"
-                >
-                  {{ 
-                    selectedEvent?.status === 'pending' ? 'En attente' :
-                    selectedEvent?.status === 'confirmed' ? 'Confirmé' :
-                    selectedEvent?.status === 'completed' ? 'Terminé' :
-                    'Annulé'
-                  }}
-                </span>
-              </div>
-              
-              <div class="space-x-2">
-                <button @click="openEditModal" class="btn btn-secondary text-sm px-3 py-1">
-                  Modifier
-                </button>
-                
-                <template v-if="selectedEvent?.status === 'pending'">
-                  <button 
-                    @click="updateAppointmentStatus(selectedEvent.id, 'confirmed')" 
-                    class="btn btn-success text-sm px-3 py-1"
-                  >
-                    Confirmer
-                  </button>
-                </template>
-                
-                <template v-if="selectedEvent?.status === 'confirmed'">
-                  <button 
-                    @click="updateAppointmentStatus(selectedEvent.id, 'completed')" 
-                    class="btn btn-primary text-sm px-3 py-1"
-                  >
-                    Terminer
-                  </button>
-                </template>
-                
-                <template v-if="selectedEvent?.status !== 'cancelled' && selectedEvent?.status !== 'completed'">
-                  <button 
-                    @click="updateAppointmentStatus(selectedEvent.id, 'cancelled')" 
-                    class="btn btn-error text-sm px-3 py-1"
-                  >
-                    Annuler
-                  </button>
-                </template>
-              </div>
-            </div>
+          <div>
+            <span class="font-semibold text-gray-700">Email:</span>
+            <p class="text-gray-900">{{ selectedEvent?.email }}</p>
+          </div>
+          <div>
+            <span class="font-semibold text-gray-700">Téléphone:</span>
+            <p class="text-gray-900">{{ selectedEvent?.phone }}</p>
+          </div>
+          <div>
+            <span class="font-semibold text-gray-700">Véhicule:</span>
+            <p class="text-gray-900">{{ selectedEvent?.vehicle }}</p>
+          </div>
+          <div>
+            <span class="font-semibold text-gray-700">Statut:</span>
+            <p class="text-gray-900">{{ selectedEvent?.status }}</p>
           </div>
         </div>
-      </div>
-      
-      <!-- Edit modal -->
-      <div v-if="showEditModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 animate-fade-in">
-          <div class="px-6 py-4 border-b flex justify-between items-center">
-            <h3 class="text-lg font-medium">Modifier le rendez-vous</h3>
-            <button @click="closeEditModal" class="text-gray-400 hover:text-gray-500">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+
+        <div class="mt-6 flex justify-end space-x-3">
+          <template v-if="selectedEvent?.status === 'pending'">
+            <button 
+              @click="updateAppointmentStatus(selectedEvent.id, 'confirmed')"
+              class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+            >
+              Confirmer
             </button>
-          </div>
+          </template>
           
-          <div class="p-6">
-            <AppointmentForm
-              v-if="editingAppointment"
-              :edit-mode="true"
-              :appointment="editingAppointment"
-              @saved="handleSaveEdit"
-              @cancel="closeEditModal"
-            />
-          </div>
+          <template v-if="selectedEvent?.status !== 'cancelled'">
+            <button 
+              @click="updateAppointmentStatus(selectedEvent.id, 'cancelled')"
+              class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Annuler
+            </button>
+          </template>
+          
+          <button 
+            @click="closeEventModal"
+            class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          >
+            Fermer
+          </button>
         </div>
       </div>
     </div>

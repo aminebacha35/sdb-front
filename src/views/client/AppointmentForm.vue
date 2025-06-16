@@ -24,7 +24,8 @@ onMounted(async () => {
   }
 })
 
-async function handleSaved(appointment: Appointment) {
+async function handleSaved(appointment: Appointment | null) {
+  if (!appointment) return
   router.push({ 
     name: 'confirmation',
     params: { id: appointment.id }
