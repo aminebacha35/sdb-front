@@ -9,7 +9,6 @@ import type { Appointment } from '../../types'
 const router = useRouter()
 const serviceTypesStore = useServiceTypesStore()
 const appointmentsStore = useAppointmentsStore()
-
 const isLoading = ref(true)
 const error = ref('')
 

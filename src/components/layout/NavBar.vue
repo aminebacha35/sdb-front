@@ -49,15 +49,6 @@ function toggleMobileMenu() {
           >
             Prendre RDV
           </router-link>
-          <template v-if="authStore.isAuthenticated">
-            <router-link 
-              to="/admin/appointments" 
-              class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
-              active-class="text-white font-bold"
-            >
-              Dashboard
-            </router-link>
-          </template>
         </div>
 
         <div class="absolute right-0 hidden sm:flex items-center space-x-4">
@@ -69,14 +60,6 @@ function toggleMobileMenu() {
             >
               Déconnexion
             </button>
-          </template>
-          <template v-else>
-            <router-link
-              to="/admin/login"
-              class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
-            >
-              Admin
-            </router-link>
           </template>
         </div>
 
@@ -141,29 +124,12 @@ function toggleMobileMenu() {
           Prendre RDV
         </router-link>
         <template v-if="authStore.isAuthenticated">
-          <router-link
-            to="/admin/appointments"
-            class="text-white hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium"
-            active-class="text-white font-bold"
-            @click="mobileMenuOpen = false"
-          >
-            Dashboard
-          </router-link>
           <button
             @click="() => { handleLogout(); mobileMenuOpen = false; }"
             class="text-white hover:text-gray-200 block w-full text-left px-3 py-2 rounded-md text-base font-medium"
           >
             Déconnexion
           </button>
-        </template>
-        <template v-else>
-          <router-link
-            to="/admin/login"
-            class="text-white hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium"
-            @click="mobileMenuOpen = false"
-          >
-            Admin
-          </router-link>
         </template>
       </div>
     </div>
