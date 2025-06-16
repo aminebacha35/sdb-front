@@ -18,7 +18,7 @@ function toggleMobileMenu() {
 </script>
 
 <template>
-  <nav class="bg-primary-700 shadow-md pt-4">
+  <nav class="bg-primary-700 shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="relative flex items-center justify-center h-20">
         <div class="absolute left-0 flex items-center">
@@ -27,24 +27,24 @@ function toggleMobileMenu() {
           </router-link>
         </div>
 
-        <div class="hidden sm:flex space-x-8">
+        <div class="hidden sm:flex space-x-8 items-center justify-center w-full h-full">
           <router-link 
             to="/" 
-            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
+            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium flex items-center justify-center h-full"
             active-class="text-white font-bold"
           >
             Accueil
           </router-link>
           <router-link 
             to="/nos-services" 
-            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
+            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium flex items-center justify-center h-full"
             active-class="text-white font-bold"
           >
             Nos services
           </router-link>
           <router-link 
             to="/appointment" 
-            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium"
+            class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-me text-xl font-medium flex items-center justify-center h-full"
             active-class="text-white font-bold"
           >
             Prendre RDV
@@ -98,10 +98,10 @@ function toggleMobileMenu() {
     </div>
 
     <div v-if="mobileMenuOpen" class="sm:hidden">
-      <div class="pt-2 pb-3 space-y-1 ml-9">
+      <div class="pt-2 pb-3 space-y-1 ml-9 flex flex-col items-center justify-center">
         <router-link
           to="/"
-          class="text-white hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium"
+          class="text-white hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium text-center"
           active-class="text-white font-bold"
           @click="mobileMenuOpen = false"
         >
@@ -109,7 +109,7 @@ function toggleMobileMenu() {
         </router-link>
         <router-link
           to="/nos-services"
-          class="text-white hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium"
+          class="text-white hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium text-center"
           active-class="text-white font-bold"
           @click="mobileMenuOpen = false"
         >
@@ -117,7 +117,7 @@ function toggleMobileMenu() {
         </router-link>
         <router-link
           to="/appointment"
-          class="text-white hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium"
+          class="text-white hover:text-gray-200 block px-3 py-2 rounded-md text-base font-medium text-center"
           active-class="text-white font-bold"
           @click="mobileMenuOpen = false"
         >
@@ -126,7 +126,7 @@ function toggleMobileMenu() {
         <template v-if="authStore.isAuthenticated">
           <button
             @click="() => { handleLogout(); mobileMenuOpen = false; }"
-            class="text-white hover:text-gray-200 block w-full text-left px-3 py-2 rounded-md text-base font-medium"
+            class="text-white hover:text-gray-200 block w-full text-center px-3 py-2 rounded-md text-base font-medium"
           >
             Déconnexion
           </button>
