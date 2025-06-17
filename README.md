@@ -42,7 +42,9 @@ L'application sera disponible à l'adresse `http://localhost:5173`.
 - Sélection de type de service
 - Choix de date et heure avec créneaux disponibles
 - Gestion d'authentification
-- Espace d'administration pour voir, modifier, supprimer les RDV
+- Espace d'administration pour voir, confirmer, annuler les RDV
+- Espace Statistique
+- Calendar des rdv
 - Communication avec Laravel via Axios
 
 ## Dépendances principales
