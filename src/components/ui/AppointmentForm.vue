@@ -2,7 +2,7 @@
 import { ref, onMounted, computed, watch } from 'vue'
 import { useServiceTypesStore } from '../../stores/serviceTypes'
 import { useAppointmentsStore } from '../../stores/appointments'
-import type { ServiceType, TimeSlot, Appointment } from '../../types'
+import type {TimeSlot, Appointment } from '../../types'
 import { format } from 'date-fns'
 
 const props = defineProps<{
@@ -226,3 +226,5 @@ async function handleSubmit() {
     </div>
   </form>
 </template>
+
+//recettage effectuer

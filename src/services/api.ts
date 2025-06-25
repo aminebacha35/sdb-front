@@ -79,7 +79,7 @@ export async function deleteAppointment(id: string): Promise<void> {
 }
 
 // === TIME SLOTS ===
-export async function fetchAvailableTimeSlots(date: string, serviceTypeId: string): Promise<TimeSlot[]> {
+export async function fetchAvailableTimeSlots(date: string, _serviceTypeId: string): Promise<TimeSlot[]> {
   const slots: TimeSlot[] = []
   const bookedAppointments = await fetchAppointments()
 

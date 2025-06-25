@@ -3,7 +3,7 @@ import { useAuthStore } from '../../stores/auth'
 import { RouterView, useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
-const router = useRouter()
+const _router = useRouter()
 
 const navItems = [
   { name: 'appointments', label: 'Rendez-vous', icon: 'calendar' },

@@ -54,7 +54,7 @@ const statusText = computed(() => {
           <span class="font-medium">Véhicule:</span> {{ appointment.vehicle }}
         </p>
         <p>
-          <span class="font-medium">Service:</span> {{ appointment.service_type.name }}
+          <span class="font-medium">Service:</span> {{ appointment.service_type?.name }}
         </p>
         <p>
           <span class="font-medium">Date:</span> {{ formattedDate }}
@@ -108,3 +108,5 @@ const statusText = computed(() => {
     </div>
   </div>
 </template>
+
+//recettage effectuer
