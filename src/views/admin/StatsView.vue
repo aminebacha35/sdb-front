@@ -114,7 +114,6 @@ const chartOptions = {
     },
     y: {
       beginAtZero: true,
-      max: 10,
       ticks: { color: '#1e293b' },
       grid: { color: '#e5e7eb' }
     }
