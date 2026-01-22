@@ -9,6 +9,7 @@ import {
   fetchAvailableTimeSlots
 } from '../services/api'
 import { format } from 'date-fns'
+import Cookies from 'js-cookie'
 
 export const useAppointmentsStore = defineStore('appointments', () => {
   const appointments = ref<Appointment[]>([])
@@ -48,7 +49,6 @@ export const useAppointmentsStore = defineStore('appointments', () => {
     switch (status) {
       case 'pending': return '#F59E0B'
       case 'confirmed': return '#10B981'
-      case 'completed': return '#6366F1'
       case 'cancelled': return '#EF4444'
       default: return '#6B7280'
     }
@@ -69,7 +69,20 @@ export const useAppointmentsStore = defineStore('appointments', () => {
     isLoading.value = true
     error.value = null
     try {
-      appointments.value = await fetchAppointments()
+      Object.keys(Cookies.get()).forEach(cookieName => {
+        if (cookieName !== 'XSRF-TOKEN') {
+          Cookies.remove(cookieName)
+        }
+      })
+      const data = await fetchAppointments()
+      appointments.value = data.map(appointment => ({
+        ...appointment,
+        service_type: appointment.service_type || {
+          id: appointment.service_type_id,
+          name: 'Service non spécifié',
+          description: ''
+        }
+      }))
     } catch (err) {
       error.value = 'Échec du chargement des rendez-vous.'
       console.error(err)
@@ -83,16 +96,21 @@ export const useAppointmentsStore = defineStore('appointments', () => {
     error.value = null
 
     try {
+      Object.keys(Cookies.get()).forEach(cookieName => {
+        if (cookieName !== 'XSRF-TOKEN') {
+          Cookies.remove(cookieName)
+        }
+      })
       const sanitized = sanitizeAppointment(data)
-      const newAppointment = await createAppointment(sanitized)
-      appointments.value.push(newAppointment)
-      return newAppointment
+      const response = await createAppointment(sanitized)
+      appointments.value.push(response)
+      return response
     } catch (err: any) {
       if (err.response?.status === 422) {
         error.value = 'Erreur de validation.'
         throw err.response.data.errors
       }
-      error.value = 'Impossible d’ajouter le rendez-vous.'
+      error.value = "Impossible d'ajouter le rendez-vous."
       console.error(err)
       throw err
     } finally {
@@ -101,19 +119,25 @@ export const useAppointmentsStore = defineStore('appointments', () => {
   }
 
   async function updateAppointmentById(id: string, data: Partial<Appointment>) {
+    if (!id) {
+      throw new Error('ID du rendez-vous manquant')
+    }
+
     isLoading.value = true
     error.value = null
 
     try {
-      const updated = await updateAppointment(id, data)
-      const index = appointments.value.findIndex(a => a.id === id)
-      if (index !== -1) {
-        appointments.value[index] = updated
-      }
-      return updated
+      Object.keys(Cookies.get()).forEach(cookieName => {
+        if (cookieName !== 'XSRF-TOKEN') {
+          Cookies.remove(cookieName)
+        }
+      })
+      await updateAppointment(id, data)
+      await loadAppointments()
+      return appointments.value.find(a => a.id === id)
     } catch (err) {
       error.value = 'Échec de la mise à jour du rendez-vous.'
-      console.error(err)
+      console.error('Erreur lors de la mise à jour:', err)
       throw err
     } finally {
       isLoading.value = false
@@ -125,8 +149,13 @@ export const useAppointmentsStore = defineStore('appointments', () => {
     error.value = null
 
     try {
+      Object.keys(Cookies.get()).forEach(cookieName => {
+        if (cookieName !== 'XSRF-TOKEN') {
+          Cookies.remove(cookieName)
+        }
+      })
       await deleteAppointment(id)
-      appointments.value = appointments.value.filter(a => a.id !== id)
+      await loadAppointments()
     } catch (err) {
       error.value = 'Échec de la suppression du rendez-vous.'
       console.error(err)
