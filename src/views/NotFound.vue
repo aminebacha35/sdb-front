@@ -12,7 +12,7 @@ function goBack() {
   <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
     <div class="text-center">
       <h1 class="text-9xl font-bold text-primary-700">404</h1>
-      <h2 class="text-3xl font-semibold mt-4 mb-6">Page non trouvée</h2>
+      <h2 class="text-blac font-semibold mt-4 mb-6">Page non trouvée</h2>
       <p class="text-gray-600 mb-8">
         La page que vous recherchez est introuvable ou a été déplacée.
       </p>
