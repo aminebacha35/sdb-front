@@ -11,6 +11,7 @@ import ServiceTypes from '../views/admin/ServiceTypes.vue'
 import NotFound from '../views/NotFound.vue'
 import ServiceView from '../views/client/ServiceView.vue'
 import StatsView from '../views/admin/StatsView.vue'
+import ParcGarage from '../views/admin/Garage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -71,7 +72,14 @@ const router = createRouter({
           name: 'admin-stats',
           component: StatsView,
           meta: { title: 'Statistiques' }
+        },
+        {
+          path: 'garage',
+          name: 'garage',
+          component: ParcGarage,
+          meta: { title: 'Parc garage' }
         }
+
       ]
     },
     {
